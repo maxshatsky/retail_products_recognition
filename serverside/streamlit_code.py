@@ -17,7 +17,11 @@ if uploaded_file is not None:
     # Step 2: Run detection script
     st.write("Running object detection on the uploaded image...")
 
-    process = subprocess.Popen("rmdir /s /q server_predictions", shell=True, stdout=subprocess.PIPE)
+    # for windows
+    # process = subprocess.Popen("rmdir /s /q server_predictions", shell=True, stdout=subprocess.PIPE)
+
+    # for unix
+    process = subprocess.Popen("rm -rf server_predictions", shell=True, stdout=subprocess.PIPE)
     command = "python detect.py"
     command_parameters = " --weights weights/weights_trained_by_sam.pt --source uploaded_pic.jpg"
     command_parameters += " --conf 0.1 --no-trace --save-txt"
