@@ -22,6 +22,7 @@ if uploaded_file is not None:
 
     # for unix
     process = subprocess.Popen("rm -rf server_predictions", shell=True, stdout=subprocess.PIPE)
+
     command = "python detect.py"
     command_parameters = " --weights weights/weights_trained_by_sam.pt --source uploaded_pic.jpg"
     command_parameters += " --conf 0.1 --no-trace --save-txt"
