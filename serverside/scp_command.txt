@@ -1,0 +1,1 @@
+scp -i ..\..\Downloads\final_project_max_key.pem weights_trained_by_sam.pt ec2-user@ec2-18-156-76-137.eu-central-1.compute.amazonaws.com:~/retail_products_recognition/serverside/
