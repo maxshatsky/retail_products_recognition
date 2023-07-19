@@ -18,8 +18,10 @@ if uploaded_file is not None:
     st.write("Running object detection on the uploaded image...")
 
     process = subprocess.Popen("rmdir /s /q server_predictions", shell=True, stdout=subprocess.PIPE)
-    command = "python detect.py --weights weights_trained_by_sam.pt --source uploaded_pic.jpg"
-    command_parameters = " --conf 0.1 --no-trace --save-txt --save-conf  --project server_predictions"
+    command = "python detect.py"
+    command_parameters = " --weights weights/weights_trained_by_sam.pt --source uploaded_pic.jpg"
+    command_parameters += " --conf 0.1 --no-trace --save-txt"
+    command_parameters += " --save-conf  --project server_predictions"
     process = subprocess.Popen(
         command+command_parameters,
         shell=True,
