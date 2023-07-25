@@ -100,9 +100,41 @@ if uploaded_file is not None:
 
     st.write("Object detection completed!")
 
-    # Step 3: Display resulting image
     result_image_path = "server_predictions/exp/uploaded_pic.jpg"
 
+    # Save cropped images.
+    data = pd.read_csv(
+        result_image_path[:-3]+"txt",
+        sep=' ',
+        names=[
+            'label',
+            'x',
+            'y',
+            'w',
+            'h',
+            'conf'
+        ]
+    )
+
+    boxes = data[['x', 'y', 'w', 'h']].to_numpy()
+    scores = data['conf'].to_numpy()
+
+    selected_indices = non_max_suppression_tf(
+        boxes=boxes,
+        scores=scores,
+        iou_threshold=0.5
+    )
+
+    filtered_data = data.iloc[selected_indices].reset_index(drop=True)
+
+    save_bboxed_images(
+        image_path=result_image_path,
+        bbox_data=filtered_data,
+        output_folder = 'cropped_images'
+    )
+
+
+    # Step 3: Display resulting image
     if os.path.isfile(result_image_path):
         result_image = open(result_image_path, "rb").read()
         st.image(result_image, caption="Resulting Image", use_column_width=True)
