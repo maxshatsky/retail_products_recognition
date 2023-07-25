@@ -5,6 +5,7 @@ import tensorflow as tf
 import pandas as pd
 import numpy as np
 import cv2
+from matplotlib import plt
 
 
 def convert_to_x1y1x2y2_format(boxes):
