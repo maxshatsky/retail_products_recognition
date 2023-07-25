@@ -51,7 +51,6 @@ def save_bboxed_images(
 
     for label, group in grouped:
         print(f"label is {label}, the type is {type(label)}\n\n")
-        color = plt.cm.tab20(label % 20)
         for idx, row in group.iterrows():
             w = row['w'] * img.shape[1]
             h = row['h'] * img.shape[0]
