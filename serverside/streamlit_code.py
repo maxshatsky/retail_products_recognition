@@ -68,9 +68,9 @@ def save_bboxed_images(
             cv2.imwrite(output_path, cropped_img)
 
 
-st.title("Object Detection")
+st.title("Retail product object detection")
 
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg"])
+uploaded_file = st.file_uploader("Upload an image!", type=["jpg", "jpeg"])
 
 if uploaded_file is not None:
     # Save the uploaded picture as 'uploaded_pic.jpg'
