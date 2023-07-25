@@ -4,6 +4,7 @@ import os
 import tensorflow as tf
 import pandas as pd
 import numpy as np
+import cv2
 
 def convert_to_x1y1x2y2_format(boxes):
     x, y, w, h = boxes[:, 0], boxes[:, 1], boxes[:, 2], boxes[:, 3]
@@ -34,6 +35,38 @@ def non_max_suppression_tf(boxes, scores, iou_threshold):
     # selected_scores = tf.gather(scores, selected_indices)
     # return selected_boxes, selected_scores
     return selected_indices
+
+
+def save_bboxed_images(
+    image_path,
+    bbox_data,
+    output_folder = 'cropped_images'
+):
+    img = plt.imread(image_path)
+
+    os.makedirs(output_folder, exist_ok=True)
+
+    grouped = bbox_data.groupby('label')
+
+
+    for label, group in grouped:
+        print(f"label is {label}, the type is {type(label)}\n\n")
+        color = plt.cm.tab20(label % 20)
+        for idx, row in group.iterrows():
+            w = row['w'] * img.shape[1]
+            h = row['h'] * img.shape[0]
+            x = row['x'] * img.shape[1]-w/2
+            y = row['y'] * img.shape[0]-h/2
+
+            # Crop and save the image
+            x1, y1 = int(x), int(y)
+            x2, y2 = int(x + w), int(y + h)
+            cropped_img = img[y1:y2, x1:x2]
+            cropped_img = cv2.cvtColor(cropped_img, cv2.COLOR_BGR2RGB)
+            os.makedirs(os.path.join(output_folder, str(label)), exist_ok=True)
+            output_path = os.path.join(output_folder, str(label), f'label_{label}_bbox_{idx}.png')
+            cv2.imwrite(output_path, cropped_img)
+
 
 st.title("Object Detection")
 
