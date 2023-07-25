@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import cv2
 from matplotlib import plt
+import uuid
 
 
 def convert_to_x1y1x2y2_format(boxes):
@@ -75,7 +76,9 @@ uploaded_file = st.file_uploader("Upload an image!", type=["jpg", "jpeg"])
 
 if uploaded_file is not None:
     # Save the uploaded picture as 'uploaded_pic.jpg'
-    with open("uploaded_pic.jpg", "wb") as f:
+    unique_foldername = f"{str(uuid.uuid4())}"
+    unique_filename = unique_foldername+"/uploaded_pic.jpg"
+    with open(unique_filename, "wb") as f:
         f.write(uploaded_file.getvalue())
 
     st.write("Image uploaded successfully!")
@@ -87,12 +90,13 @@ if uploaded_file is not None:
     # process = subprocess.Popen("rmdir /s /q server_predictions", shell=True, stdout=subprocess.PIPE)
 
     # for unix
-    process = subprocess.Popen("rm -rf server_predictions", shell=True, stdout=subprocess.PIPE)
+    process = subprocess.Popen("rm -rf " + unique_foldername, shell=True, stdout=subprocess.PIPE)
 
     command = "python detect.py"
-    command_parameters = " --weights weights/weights_trained_by_sam.pt --source uploaded_pic.jpg"
+    command_parameters = " --weights weights/weights_trained_by_sam.pt"
+    command_parameters += "--source " + unique_filename
     command_parameters += " --conf 0.1 --no-trace --save-txt"
-    command_parameters += " --save-conf  --project server_predictions"
+    command_parameters += " --save-conf  --project " + unique_foldername
     process = subprocess.Popen(
         command+command_parameters,
         shell=True,
@@ -102,11 +106,11 @@ if uploaded_file is not None:
 
     st.write("Object detection completed!")
 
-    result_image_path = "server_predictions/exp/uploaded_pic.jpg"
+    result_image_path = unique_foldername + "/exp/uploaded_pic.jpg"
 
     # Save cropped images.
     data = pd.read_csv(
-        result_image_path[:-3]+"txt",
+        unique_foldername + "/exp/labels/uploaded_pic.txt",
         sep=' ',
         names=[
             'label',
@@ -132,7 +136,7 @@ if uploaded_file is not None:
     save_bboxed_images(
         image_path=result_image_path,
         bbox_data=filtered_data,
-        output_folder = 'cropped_images'
+        output_folder = unique_foldername+'/cropped_images'
     )
 
 
