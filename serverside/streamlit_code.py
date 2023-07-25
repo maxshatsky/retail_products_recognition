@@ -455,19 +455,13 @@ if uploaded_file is not None:
 
     # But first delete it if exists
     # for windows
-    # process = subprocess.Popen(
-    #     "rmdir /s /q " + unique_foldername,
-    #     shell=True,
-    #     stdout=subprocess.PIPE
-    # )
-
     process = subprocess.run(
         "rmdir /s /q " + unique_foldername,
         shell=True
     )
 
     # for unix
-    # process = subprocess.Popen("rm -rf " + unique_foldername, shell=True, stdout=subprocess.PIPE)
+    # process = subprocess.run("rm -rf " + unique_foldername, shell=True)
 
     print(f"unique_foldername = {unique_foldername}")
     print(f"unique_filename = {unique_filename}")
@@ -541,7 +535,15 @@ if uploaded_file is not None:
         unique_foldername + '/cropped_images'
     )
 
+    # end delete in the end
+    # for windows
+    process = subprocess.run(
+        "rmdir /s /q " + unique_foldername,
+        shell=True
+    )
 
+    # for unix
+    # process = subprocess.run("rm -rf " + unique_foldername, shell=True)
 
 else:
     st.write("Please upload an image.")
