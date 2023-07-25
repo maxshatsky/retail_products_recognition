@@ -1,8 +1,40 @@
 import streamlit as st
 import subprocess
 import os
+import tensorflow as tf
+import pandas as pd
+import numpy as np
 
-# Step 1: Upload picture
+def convert_to_x1y1x2y2_format(boxes):
+    x, y, w, h = boxes[:, 0], boxes[:, 1], boxes[:, 2], boxes[:, 3]
+    x1 = x - w / 2
+    y1 = y - h / 2
+    x2 = x + w / 2
+    y2 = y + h / 2
+    return np.stack((x1, y1, x2, y2), axis=1)
+
+
+def convert_to_xywh_format(boxes):
+    x1, y1, x2, y2 = boxes[:, 0], boxes[:, 1], boxes[:, 2], boxes[:, 3]
+    x = (x1 + x2) / 2
+    y = (y1 + y2) / 2
+    w = x2 - x1
+    h = y2 - y1
+    return np.stack((x, y, w, h), axis=1)
+
+
+def non_max_suppression_tf(boxes, scores, iou_threshold):
+    selected_indices = tf.image.non_max_suppression(
+        convert_to_x1y1x2y2_format(boxes),
+        scores,
+        max_output_size=100,
+        iou_threshold=iou_threshold
+    )
+    # selected_boxes = tf.gather(boxes, selected_indices)
+    # selected_scores = tf.gather(scores, selected_indices)
+    # return selected_boxes, selected_scores
+    return selected_indices
+
 st.title("Object Detection")
 
 uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg"])
