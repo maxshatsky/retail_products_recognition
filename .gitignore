@@ -5,8 +5,10 @@ __pycache__/
 
 # C extensions
 *.so
+serverside/weights
 
 # Distribution / packaging
+.idea/
 .Python
 build/
 develop-eggs/

@@ -1,0 +1,47 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+.idea/
+
+
+# PyCharm settings
+.idea/
+
+# Compiled Python files
+*.pyc
+*.pyo
+__pycache__/
+
+# Python package logs or large binary files
+*.log
+*.gz
+*.tar
+*.zip
+
+# Python distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Jupyter Notebook temporary files
+.ipynb_checkpoints/
+
+# Visual Studio Code settings
+.vscode/
+
+# Sublime Text settings
+.sublime-project
+.sublime-workspace
+
+# macOS files
+.DS_Store
+
+# Windows files
+Thumbs.db
+
